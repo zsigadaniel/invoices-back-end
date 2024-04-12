@@ -6,14 +6,25 @@ import { PrismaService } from 'src/prisma.service';
 export class InvoicesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<Invoice[]> {
-    return this.prisma.invoice.findMany();
+  async findAll(id: string): Promise<Invoice[]> {
+    return this.prisma.invoice.findMany({
+      where: {
+        userId: id,
+      },
+    });
   }
 
-  async findOne(id: string): Promise<Invoice> {
-    const found = await this.prisma.invoice.findFirst({
+  async findOne({
+    id,
+    userId,
+  }: {
+    id: string;
+    userId: string;
+  }): Promise<Invoice> {
+    const found = await this.prisma.invoice.findUnique({
       where: {
         id,
+        userId,
       },
     });
 
@@ -24,8 +35,8 @@ export class InvoicesService {
     return found;
   }
 
-  async total() {
-    const invoices = await this.findAll();
+  async total(id: string): Promise<number> {
+    const invoices = await this.findAll(id);
     return invoices.reduce((acc, invoice) => acc + invoice.amount, 0);
   }
 }
