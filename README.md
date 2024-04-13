@@ -14,6 +14,12 @@ $ docker compose up -d (start the container in the background)
 
 I have set the port to  ```9876``` feel free to adjust in the yml file to what suites your needs
 
+There is an .env-example that has the DATABASE_URL, convert this to .env, and adjust according to your needs.
+
+```bash
+$ npx prisma migrate dev
+```
+
 Seeding the database:
 
 
